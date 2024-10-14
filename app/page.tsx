@@ -61,7 +61,7 @@ const Home = async () => {
             className="rounded-xl object-cover"
           />
         </div>
-        {/* Appointments */}n
+        {/* Appointments */}
         <BookingItem />
         {/* Recommended */}
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
