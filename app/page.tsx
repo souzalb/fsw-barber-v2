@@ -24,6 +24,7 @@ const Home = async () => {
     <div>
       {/* header*/}
       <Header />
+
       <div className="p-5">
         {/* Text */}
         <h2 className="text-xl">
