@@ -178,7 +178,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                   Reservar
                 </Button>
 
-                <SheetContent className="overflow-y-auto px-0">
+                <SheetContent className="overflow-y-auto px-0 [&::-webkit-scrollbar]:hidden">
                   <SheetHeader>Fazer Reserva</SheetHeader>
 
                   <div className="border-b border-solid py-5">
