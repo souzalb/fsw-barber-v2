@@ -1,26 +1,49 @@
 //"use client" //torna essa página uma client componente, ou seja, o que tiver de js vai ser renderizado, coisa que por padrão a page.tsx (server component) não faz
 
-import { SearchIcon } from "lucide-react"
 import Header from "./_components/header"
 import { Button } from "./_components/ui/button"
-import { Input } from "./_components/ui/input"
 import Image from "next/image"
-import { Card, CardContent } from "./_components/ui/card"
 import { db } from "./_lib/prisma"
 import BarbershopItem from "./_components/barbershop-item"
 import { quickSearchOption } from "./_constants/search"
 import BookingItem from "./_components/booking-item"
 import Search from "./_components/search"
 import Link from "next/link"
+import { getServerSession } from "next-auth"
+import { authOptions } from "./_lib/auth"
 
 const Home = async () => {
   //chamar meu banco de dados
+  const session = await getServerSession(authOptions)
+  //por conta do authOptions, conseguimos pegar as infos de usuário logado em server components com essa função
+
   const barbershops = await db.barbershop.findMany({})
   const popularBarbershops = await db.barbershop.findMany({
     orderBy: {
       name: "desc",
     },
   })
+
+  const confirmedBookings = session?.user
+    ? await db.booking.findMany({
+        where: {
+          userId: (session.user as any).id,
+          date: {
+            gte: new Date(),
+          },
+        },
+        include: {
+          service: {
+            include: {
+              barbershop: true,
+            },
+          },
+        },
+        orderBy: {
+          date: "asc",
+        },
+      })
+    : []
 
   return (
     <div>
@@ -30,7 +53,7 @@ const Home = async () => {
       <div className="p-5">
         {/* Text */}
         <h2 className="text-xl">
-          Olá, <b>Miguel</b>
+          Olá, <b>{session?.user?.name}</b>
         </h2>
         <p>Segunda-feira, 14 de outubro</p>
         {/* Search */}
@@ -64,7 +87,14 @@ const Home = async () => {
           />
         </div>
         {/* Appointments */}
-        <BookingItem />
+        <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
+          Agendamentos
+        </h2>
+        <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+          {confirmedBookings.map((booking) => (
+            <BookingItem key={booking.id} booking={booking} />
+          ))}
+        </div>
         {/* Recommended */}
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
           Recomendados
