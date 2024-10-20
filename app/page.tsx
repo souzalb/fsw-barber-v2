@@ -11,6 +11,8 @@ import Search from "./_components/search"
 import Link from "next/link"
 import { getServerSession } from "next-auth"
 import { authOptions } from "./_lib/auth"
+import { format } from "date-fns"
+import { ptBR } from "date-fns/locale"
 
 const Home = async () => {
   //chamar meu banco de dados
@@ -53,9 +55,15 @@ const Home = async () => {
       <div className="p-5">
         {/* Text */}
         <h2 className="text-xl">
-          Olá, <b>{session?.user?.name}</b>
+          Olá, <b>{session?.user ? session.user.name : "Faça seu Login!"}</b>
         </h2>
-        <p>Segunda-feira, 14 de outubro</p>
+        <p>
+          <span className="capitalize">
+            {format(new Date(), "EEEE, dd ", { locale: ptBR })}
+          </span>
+          de
+          <span>{format(new Date(), " MMMM", { locale: ptBR })}</span>
+        </p>
         {/* Search */}
         <div className="mt-6">
           <Search />
@@ -87,9 +95,14 @@ const Home = async () => {
           />
         </div>
         {/* Appointments */}
-        <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
-          Agendamentos
-        </h2>
+        {confirmedBookings && session?.user ? (
+          <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
+            Agendamentos
+          </h2>
+        ) : (
+          ""
+        )}
+
         <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
           {confirmedBookings.map((booking) => (
             <BookingItem key={booking.id} booking={booking} />

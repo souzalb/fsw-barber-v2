@@ -31,6 +31,7 @@ import {
 import { deleteBooking } from "./_actions/delete-booking"
 import { toast } from "sonner"
 import { useState } from "react"
+import { CursorTextIcon } from "@radix-ui/react-icons"
 
 interface BookingItemProps {
   booking: Prisma.BookingGetPayload<{
