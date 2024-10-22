@@ -12,6 +12,7 @@ const Bookings = async () => {
     return notFound()
   }
 
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   const confirmedBookings = await db.booking.findMany({
     where: {
       userId: (session.user as any).id,
@@ -29,6 +30,7 @@ const Bookings = async () => {
     },
   })
 
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   const concludedBookings = await db.booking.findMany({
     where: {
       userId: (session.user as any).id,

@@ -26,6 +26,7 @@ const Home = async () => {
     },
   })
 
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   const confirmedBookings = session?.user
     ? await db.booking.findMany({
         where: {

@@ -13,6 +13,7 @@ export const authOptions: AuthOptions = {
     }),
   ],
 
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   callbacks: {
     async session({ session, user }) {
       session.user = {

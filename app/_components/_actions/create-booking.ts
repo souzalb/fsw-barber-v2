@@ -10,6 +10,7 @@ interface CreateBookingParams {
   date: Date
 }
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 export const createBooking = async (params: CreateBookingParams) => {
   const user = await getServerSession(authOptions)
   if (!user) {
