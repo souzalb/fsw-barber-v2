@@ -17,6 +17,7 @@ import { Dialog, DialogContent } from "./ui/dialog"
 
 import SignInDialog from "./sign-in-dialog"
 import BookingSummary from "./booking-summary"
+import { useRouter } from "next/navigation"
 
 interface ServiceItemProps {
   service: BarbershopService
@@ -76,8 +77,10 @@ const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
 }
 
 const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
-  const [signInDialogIsOpen, setSignInDialogIsOpen] = useState(false)
   const { data } = useSession()
+  const router = useRouter()
+  const [signInDialogIsOpen, setSignInDialogIsOpen] = useState(false)
+
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined)
   const [selectedTime, setSelectedTime] = useState<string | undefined>(
     undefined,
@@ -138,7 +141,12 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
         date: selectedDate,
       })
       handleBookingSheetOpenChange()
-      toast.success("Reserva criada com sucesso!")
+      toast.success("Reserva criada com sucesso!", {
+        action: {
+          label: <b>Ver agendamentos</b>,
+          onClick: () => router.push("/bookings"),
+        },
+      })
     } catch (error) {
       console.error(error)
       toast.error("Erro ao efetuar reserva!")
@@ -254,15 +262,12 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                   )}
 
                   {selectedDate && (
-                    <div className="p-5">
-                      {" "}
-                      <div className="mb-6 mt-3">
-                        <BookingSummary
-                          barbershop={barbershop}
-                          service={service}
-                          selectedDate={selectedDate}
-                        />
-                      </div>
+                    <div className="mb-6 p-5">
+                      <BookingSummary
+                        barbershop={barbershop}
+                        service={service}
+                        selectedDate={selectedDate}
+                      />
                     </div>
                   )}
 
